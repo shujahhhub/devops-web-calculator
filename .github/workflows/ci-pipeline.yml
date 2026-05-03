@@ -1,0 +1,29 @@
+name: DevOps Calculator Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Grab the code
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Run Automated Tests
+        run: pytest test_app.py
+
+  build-container:
+    needs: test-code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Grab the code
+        uses: actions/checkout@v3
+      - name: Build Docker Image
+        run: docker build -t devops-calculator .
