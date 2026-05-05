@@ -16,7 +16,7 @@ Every push to the `main` branch triggers the following automated workflow:
 3. **Automated QA Testing:** Executes `pytest test_app.py` to ensure core mathematical logic and web routing function correctly.
 4. **Container Build:** If all tests pass, the pipeline builds a fresh Docker image from the `Dockerfile`.
 
-How to Run Locally (Without Docker)
+🧑‍💻 How to Run Locally (Without Docker)
 If you want to run the raw Python code directly:
 
 Bash
