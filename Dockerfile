@@ -1,20 +1,31 @@
-# 1. Start with a lightweight, official Python image
-FROM python:3.12-slim
+# Stage 1: Build Stage
+FROM golang:1.22-alpine AS builder
 
-# 2. Set the working directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# 3. Copy only the requirements file first
-COPY requirements.txt .
+# Copy the dependency files first to leverage Docker caching
+COPY go.mod go.sum* ./
+RUN go mod download
 
-# 4. Install the dependencies inside the container
-RUN pip install --no-cache-dir -r requirements.txt
-
-# 5. Copy the rest of your application code into the container
+# Copy the rest of your source code
 COPY . .
 
-# 6. Expose the port the Flask app runs on
-EXPOSE 5000
+# Compile the Go application into a binary named "calculator"
+RUN go build -o calculator .
 
-# 7. Define the command to start the app
-CMD ["python3", "app.py"]
+
+# Stage 2: Runtime Stage
+FROM alpine:latest
+
+# Set the working directory for the final image
+WORKDIR /app
+
+# Copy ONLY the compiled binary from the builder stage
+COPY --from=builder /app/calculator .
+
+# Expose the standard port
+EXPOSE 8080
+
+# Command to run the executable
+CMD ["./calculator"]
