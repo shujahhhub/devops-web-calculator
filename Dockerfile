@@ -1,31 +1,12 @@
-# Stage 1: Build Stage
-FROM golang:1.22-alpine AS builder
+FROM python:3.12-slim
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the dependency files first to leverage Docker caching
-COPY go.mod go.sum* ./
-RUN go mod download
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of your source code
-COPY . .
+COPY app.py ./
 
-# Compile the Go application into a binary named "calculator"
-RUN go build -o calculator .
+EXPOSE 5000
 
-
-# Stage 2: Runtime Stage
-FROM alpine:latest
-
-# Set the working directory for the final image
-WORKDIR /app
-
-# Copy ONLY the compiled binary from the builder stage
-COPY --from=builder /app/calculator .
-
-# Expose the standard port
-EXPOSE 8080
-
-# Command to run the executable
-CMD ["./calculator"]
+CMD ["python", "app.py"]
