@@ -1,3 +1,7 @@
+# CALCULATOR SCREEN
+
+<img width="1917" height="865" alt="image" src="https://github.com/user-attachments/assets/771929d1-b77d-4683-893c-f587483d1024" />
+
 # 🚀 DevOps Web Calculator
 
 A containerized, web-based calculator microservice built to demonstrate core DevOps principles, including Continuous Integration/Continuous Deployment (CI/CD) and Docker containerization.
